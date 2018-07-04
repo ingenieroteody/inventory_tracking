@@ -1,0 +1,43 @@
+server:
+  port: 8888
+  servlet:
+    contextPath: /inv
+
+spring:
+  datasource:
+    dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+    url: jdbc:mysql://localhost:3306/inv
+    username: root
+    password:
+    poolName: SpringBootHikariCP
+    maximumPoolSize: 5
+    minimumIdle: 3
+    maxLifetime: 2000000
+    connectionTimeout: 30000
+    idleTimeout: 30000
+    pool-prepared-statements: true
+    max-open-prepared-statements: 250
+    initialization-mode: always
+  jpa:
+    #databasePlatform: org.hibernate.dialect.MySQL5Dialect 
+    show-sql: false
+    hibernate:
+        ddl-auto: update
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        id: 
+          new_generator_mappings: false
+        format_sql: false
+  jackson:
+    serialization:
+        fail-on-empty-beans: false
+
+logging:
+  level:
+    org.springframework.web: ERROR
+    ph.inv: ERROR
+    org.hibernate.SQL: ERROR
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: D:\workspaces\workspace-spring\Inv\log\app.log

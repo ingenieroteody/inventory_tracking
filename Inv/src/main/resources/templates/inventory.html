@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Spring Boot Thymeleaf Hello World Example</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.1.0/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/datatables.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-datetimepicker/2.4.2/css/bootstrap-datetimepicker.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.theme.min.css}" />
+
+</head>
+<body>
+	<div th:replace="include/menu :: menu">
+	<!-- 
+		INSERT MENU HERE
+	 -->
+	</div>
+	
+	<div class="container">
+
+		<div class="jumbotron" role="form">
+			<form action="#" th:action="@{/inventory/save}" th:object="${inventory}" method="post">
+				<div class="form-group row ">
+					<label class="col-sm-2 col-form-label">Date</label>
+					<div class="col-sm-3 input-append date">
+						<input id="date" class="form-control" th:classappend="${#fields.hasErrors('date')} ? is-invalid : ''" type="text" th:text="${#dates.format(date, 'mm/dd/yyyy')}" th:field="*{date}" placeholder="MM/DD/YYYY" maxlength="10" readonly />
+						<span class="add-on"><i class="icon-calendar" id="cal"></i></span>
+						<div class="invalid-feedback" th:if="${#fields.hasErrors('date')}">
+							Please provide date
+						</div>
+					</div>
+				</div>
+				<div class="form-group row ">
+					<label class="col-sm-2 col-form-label">Number Code</label>
+					<div class="col-sm-3">
+						<input class="form-control" th:classappend="${#fields.hasErrors('numberCode')} ? is-invalid : ''" type="text" th:field="*{numberCode}" maxlength="10" />
+						<div class="invalid-feedback" th:if="${#fields.hasErrors('numberCode')}" th:errors="*{numberCode}"></div>
+					</div>
+				</div>				
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Product</label>
+					<div class="col-sm-3">
+						<input id="productName" class="form-control" th:classappend="${#fields.hasErrors('product')} ? is-invalid : ''" th:field="*{productName}"  />
+						<input id="productValue" type="hidden" th:field="*{product}" />
+						<div class="invalid-feedback" th:if="${#fields.hasErrors('product')}">
+							<p th:each="err : ${#fields.errors('product')}" th:text="${err}"></p>
+						</div>						
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Quantity</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="quantity" value="1" readonly />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Color</label>
+					<div class="col-sm-3">
+						<select class="form-control" th:field="${inventory.color.id}">
+							<option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.code + '-' + color.name}"></option>
+						</select>
+					</div>
+				</div>				
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Size</label>
+					<div class="col-sm-3">
+						<select class="form-control" th:field="${inventory.size}">
+							<option th:each="size : ${T(ph.inv.enums.SizeEnum).values()}" th:value="${size}" th:text="${size.value}"></option>
+						</select>
+					</div>
+				</div>				
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Sewer</label>
+					<div class="col-sm-3">
+						<select class="form-control" th:field="*{employee}">
+							<option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.lastname + ', ' + employee.firstname}"></option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row" th:if="${inventory.id} != 0">
+					<label class="col-sm-2 col-form-label">Status</label>
+						<div class="col-sm-3">
+						<select class="form-control" th:field="${inventory.status}">
+							<option th:each="stat : ${T(ph.inv.enums.StatusEnum).values()}" th:value="${stat}" th:text="${stat.value}"></option>
+						</select>
+					</div>
+				</div>		
+				<div class="form-group row">
+					<input class="btn btn-primary" type="submit" value="Submit" /><input class="btn btn-secondary" type="reset" value="Reset" />
+					<input type="hidden" th:field="*{id}"/>
+				</div>
+			</form>
+		</div>
+
+	</div>
+	<!-- /.container -->
+
+	<table id="grid-basic" class="table table-condensed table-hover table-striped">
+	    <thead>
+	        <tr>
+	        	<th>ID</th>
+	            <th>Date</th>
+	            <th>Number Code</th>
+	            <th>Product</th>
+	            <th>Color</th>
+	            <th>Size</th>
+	            <th>Status</th>
+	            <th>Sewer</th>
+	        </tr>
+	    </thead>
+	    <tfoot>
+	    	<tr>
+	        	<th>ID</th>
+	            <th>Date</th>
+	            <th>Number Code</th>
+	            <th>Product</th>
+	            <th>Color</th>
+	            <th>Size</th>
+	            <th>Status</th>
+	            <th>Sewer</th>
+	    	</tr>
+	    </tfoot>
+	</table>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLongTitle">Changes</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        ...
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	        <button type="button" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
+	<div th:replace="include/footer :: footer">
+		<!-- INSERT FOOTER HERE -->
+	</div>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap-datetimepicker/2.4.2/js/bootstrap-datetimepicker.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js}"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var table = $("#grid-basic").DataTable({
+			"ajax": 'http://localhost:8888/inv/api/getallinventory',
+			"deferRender": true
+		});
+		
+		//For changing status
+		$('#grid-basic tbody').on('dblclick', 'tr', function () {
+			var data = table.row( this ).data();
+			window.location.href = "http://localhost:8888/inv/inventory/edit/" + data[0];
+		});
+		
+		$("input[id='date']").datetimepicker({
+			format: 'mm/dd/yyyy',
+			todayHighlight: true,
+			orientation: 'bottom right',
+			autoclose: true,
+			pickTime: false,
+			minView: 2
+		});
+		
+		$("input[id='productName']").autocomplete({
+			source: function(request,response) {
+				$.ajax({
+					url: "http://localhost:8888/inv/api/findproduct",
+					type: "GET",
+					dataType: "json",
+					data: "keyword=" + $("#productName").val(),
+					success: function(data) {
+						if(!data.length) {
+							var noResultMessage = [{
+								id: " - ",
+								name: "No matches found"
+							}] ;
+							response(noResultMessage);
+						} else {
+							response(data);
+						}	
+					}
+				});
+			},
+			minLength: 3,
+			search: function(){
+				$(this).addClass('working');
+			},
+			open: function() {
+				$(this).removeClass('working');
+			},
+			select: function(event, ui) {
+				if(ui.item.id==" - ") {
+					this.value = "";
+					$("#productValue").val("");
+					return false;
+				}
+				$("#productValue").val(ui.item.id);
+			    this.value = "[" + ui.item.code + "] " + ui.item.name;
+			    return false;
+			}
+		}).autocomplete("instance")._renderItem = function( ul, item ) {
+		      return $("<li>")
+		        .append("<div>[" + item.id + "] " + item.name + "</div>")
+		        .appendTo(ul);
+		};
+	})
+	</script>
+</body>
+</html>

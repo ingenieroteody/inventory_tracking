@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Spring Boot Thymeleaf Hello World Example</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.1.0/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/jquery.bootgrid.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+
+</head>
+<body>
+	<div th:replace="include/menu :: menu">
+		<!-- 
+			INSERT MENU HERE
+		 -->
+	</div>
+	
+	<div class="container">
+		<div class="alert alert-success" role="alert">
+			"HUWAT"
+		</div>
+
+	</div>
+	
+	<div class="container">
+
+		<div class="jumbotron">
+			<form id="form" class="" action="#" th:action="@{/audit/search}" method="get">
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Entity</label>
+				<div class="col-sm-3">
+					<select th:name="entity">
+						<option th:each="entity : ${entities}" th:value="${entity}" th:text="${entity}"></option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Revision Type</label>
+				<div class="col-sm-3">
+					<select th:name="type">
+						<option th:each="type : ${T(org.hibernate.envers.RevisionType).values()}" th:value="${type}" th:text="${type}"></option>
+					</select>
+				</div>
+			</div>
+				<div class="form-group">
+					<input class="btn btn-primary" type="submit" value="Submit" /><input class="btn btn-secondary" type="reset" value="Reset" />
+				</div>
+			</form>
+		</div>
+
+	</div>
+	<!-- /.container -->
+	<table id="grid-basic" class="table table-condensed table-hover table-striped">
+	    <thead>
+	        <tr>
+	            <th data-column-id="id" data-type="numeric" data-identifier="true">ID</th>
+	            <th data-column-id="code" >Code</th>
+	            <th data-column-id="name" data-order="asc" data-sortable="true">Name</th>
+	            <th data-column-id="commands" data-formatter="commands" data-sortable="false">Action</th>
+	        </tr>
+	    </thead>
+	</table>
+	
+	<div th:replace="include/footer :: footer">
+		<!-- INSERT FOOTER HERE -->
+	</div>
+</body>
+</html>

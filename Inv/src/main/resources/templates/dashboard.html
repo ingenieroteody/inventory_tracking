@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Spring Boot Thymeleaf Hello World Example</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.1.0/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/datatables.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />>
+
+</head>
+<body>
+	<div th:replace="include/menu :: menu">
+		<!-- 
+			INSERT MENU HERE
+		 -->
+	</div>
+
+	<div class="container">
+
+	<div class="card">
+	  <div class="card-header">
+		Current Inventory
+	  </div>
+	  <div class="card-body">
+	    <!-- <h5 class="card-title">Special title treatment</h5> -->
+	    <p class="card-text">
+
+	    </p>
+	    	<table id="current-inventory" class="table table-condensed table-hover table-striped">
+			    <thead>
+			        <tr>
+			    		<th>Quantity</th>
+			            <th>Code</th>
+			            <th>Name</th>
+			            <th>Size</th>
+			            <th>Status</th>
+			            <th>Color</th>
+			        </tr>
+			    </thead>
+			</table>
+	   <!--  <a href="#" class="btn btn-primary">Go somewhere</a> -->
+	  </div>
+	</div>
+
+	</div>
+	<!-- /.container -->
+
+	<div th:replace="include/footer :: footer">
+		<!-- INSERT FOOTER HERE -->
+	</div>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var table = $("#current-inventory").DataTable({
+			"ajax": 'http://localhost:8888/inv/api/getcurrentinventory',
+			"deferRender": true
+		});
+		
+	})
+	</script>
+</body>
+</html>
