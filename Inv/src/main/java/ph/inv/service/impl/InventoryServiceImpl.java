@@ -29,4 +29,8 @@ public class InventoryServiceImpl extends AbstractServiceImpl<Inventory, Long> i
 	public List<CurrentInventory> getCurrentStock() {
 		return inventoryDao.getCurrentStock();
 	}
+
+	public List<Object []> getAuditTrail(Long id) {
+		return inventoryDao.getAuditTrail(id);
+	}
 }

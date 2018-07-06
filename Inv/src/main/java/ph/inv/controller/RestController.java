@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -140,6 +141,20 @@ public class RestController {
 		dataTable.setData(jsonInventories);
 		return dataTable;
 	}	
+	
+	
+	@RequestMapping(path="/auditinventory", method=RequestMethod.GET, produces="application/json")
+	public List<Object []> auditInventory(@RequestParam MultiValueMap<String, String> params) {
+		List<Object []> inventory = inventoryService.getAuditTrail(Long.parseLong(params.getFirst("id")));
+		
+		for(Object [] o : inventory) {
+			System.out.println((Inventory) o[0]);
+			System.out.println(o[1]);
+			System.out.println(o[2]); 
+		}
+		
+		return inventory;
+	}
 	
 	
 	@RequestMapping(path="/findproduct", method=RequestMethod.GET, produces="application/json")

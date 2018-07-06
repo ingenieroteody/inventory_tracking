@@ -13,4 +13,6 @@ public interface InventoryDao extends AbstractDao<Inventory, Long>{
 	public List<Inventory> findByNumberCode(String numberCode);
 	
 	public List<CurrentInventory> getCurrentStock();
+	
+	public List<Object []> getAuditTrail(Long id);
 }

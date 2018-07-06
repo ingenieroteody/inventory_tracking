@@ -125,12 +125,12 @@
 	    </tfoot>
 	</table>
 
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+	<!-- Modal for Audit -->
+	<div class="modal fade" id="modalAudit" tabindex="-1" role="dialog" aria-labelledby="modalAuditTitle" aria-hidden="true">
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLongTitle">Changes</h5>
+	        <h5 class="modal-title" id="modalAuditTitle">Audit Trail</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
@@ -140,11 +140,11 @@
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-	        <button type="button" class="btn btn-primary">Save changes</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
+
 
 	<div th:replace="include/footer :: footer">
 		<!-- INSERT FOOTER HERE -->
@@ -155,8 +155,30 @@
 	$(document).ready(function(){
 		var table = $("#grid-basic").DataTable({
 			"ajax": 'http://localhost:8888/inv/api/getallinventory',
-			"deferRender": true
+			"deferRender": true,
+			"createdRow": function( row, data, dataIndex, cell ) {
+				    anchorElement = '<a href="" id="inventory-'+data[0]+'" />';
+				   $(cell[2]).wrapInner(anchorElement);
+				}
 		});
+
+		//Attach a click event to created links once the tables is drawn.
+		table.on('draw', function () {
+			$("a[id^=inventory-]").click(function() {
+				var id = this.id.split("-")[1];
+				$.ajax({
+					url: "http://localhost:8888/inv/api/auditinventory",
+					type: "GET",
+					dataType: "json",
+					data: "id=" + id,
+					success: function(data) {
+						$("#modalAudit").modal("toggle");
+						console.log(data);
+					}
+				});
+				return false;
+			});
+		} );
 		
 		//For changing status
 		$('#grid-basic tbody').on('dblclick', 'tr', function () {

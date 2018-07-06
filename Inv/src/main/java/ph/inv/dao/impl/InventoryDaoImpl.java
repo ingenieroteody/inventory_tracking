@@ -1,13 +1,13 @@
 package ph.inv.dao.impl;
 
-import java.math.BigInteger;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
+import org.hibernate.envers.query.AuditEntity;
+import org.hibernate.envers.query.AuditQuery;
 import org.springframework.stereotype.Repository;
 
 import ph.inv.bean.CurrentInventory;
@@ -74,5 +74,13 @@ public class InventoryDaoImpl extends AbstractDaoImpl<Inventory, Long> implement
 		
 		
 		return currentInventory;
+	}
+
+	public List<Object []> getAuditTrail(Long id) {
+		
+		AuditQuery auditQuery= getAuditReader().createQuery().forRevisionsOfEntity(Inventory.class, false, true);
+		auditQuery.add(AuditEntity.id().eq(id));
+
+		return auditQuery.getResultList();
 	}
 }

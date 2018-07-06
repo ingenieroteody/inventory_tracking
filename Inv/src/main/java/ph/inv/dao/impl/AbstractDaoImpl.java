@@ -14,6 +14,9 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+
 import ph.inv.annotation.Searchable;
 import ph.inv.dao.AbstractDao;
 import ph.inv.entity.BaseEntity;
@@ -125,5 +128,9 @@ public abstract class AbstractDaoImpl<T, ID extends Serializable> implements Abs
 			searchableFields.put(clazz.getSimpleName(),fields);
 		}
 		return searchableFields;
+	}
+	
+	protected AuditReader getAuditReader() {
+		return AuditReaderFactory.get(entityManager);
 	}
 }
