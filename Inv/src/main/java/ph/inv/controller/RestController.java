@@ -1,10 +1,12 @@
 package ph.inv.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
@@ -148,8 +150,10 @@ public class RestController {
 		List<Object []> inventory = inventoryService.getAuditTrail(Long.parseLong(params.getFirst("id")));
 		
 		for(Object [] o : inventory) {
-			System.out.println((Inventory) o[0]);
-			System.out.println(o[1]);
+			final Inventory i = (Inventory) o[0];
+			final DefaultRevisionEntity revision = (DefaultRevisionEntity) o[1];
+			System.out.println(i);
+			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(revision.getRevisionDate()) + " : " + revision.getTimestamp());
 			System.out.println(o[2]); 
 		}
 		
