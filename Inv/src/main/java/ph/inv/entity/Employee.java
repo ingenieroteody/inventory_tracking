@@ -52,6 +52,10 @@ public class Employee extends BaseEntity {
 		this.position = position;
 	}
 	
+	public String getCompleteName() {
+		return lastname + ", " + firstname;
+	}
+	
 	public String toString() {
 		return "Firstname: " + firstname + " Lastname: " + lastname + " Position: " + position.getValue();
 	}

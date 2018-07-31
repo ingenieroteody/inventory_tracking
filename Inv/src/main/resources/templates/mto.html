@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Spring Boot Thymeleaf Hello World Example</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.1.0/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/datatables.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-datetimepicker/2.4.2/css/bootstrap-datetimepicker.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.theme.min.css}" />
+
+</head>
+<body>
+	<div th:replace="include/menu :: menu">
+		<!-- 
+			INSERT MENU HERE
+		 -->
+	</div>
+	
+	<div class="container">
+
+		<div class="jumbotron" role="form">
+			<form action="#" th:action="@{/mto/save}" th:object="${mto}" method="post">
+				<div class="form-group row ">
+					<label class="col-sm-2 col-form-label">Order Date</label>
+					<div class="col-sm-3 input-append date">
+						<input id="order-date" class="form-control" th:classappend="${#fields.hasErrors('orderDate')} ? is-invalid : ''" type="text" th:text="${#dates.format(date, 'mm/dd/yyyy')}" th:field="*{orderDate}" placeholder="MM/DD/YYYY" maxlength="10" readonly />
+						<span class="add-on"><i class="icon-calendar" id="cal-order"></i></span>
+						<div class="invalid-feedback" th:if="${#fields.hasErrors('orderDate')}">
+							Please provide order date
+						</div>
+					</div>
+				</div>
+				<div class="form-group row ">
+					<label class="col-sm-2 col-form-label">Pick-up Date</label>
+					<div class="col-sm-3 input-append date">
+						<input id="pickup-date" class="form-control" th:classappend="${#fields.hasErrors('pickupDate')} ? is-invalid : ''" type="text" th:text="${#dates.format(pickupDate, 'mm/dd/yyyy')}" th:field="*{pickupDate}" placeholder="MM/DD/YYYY" maxlength="10" readonly />
+						<span class="add-on"><i class="icon-calendar" id="cal-pickup"></i></span>
+						<div class="invalid-feedback" th:if="${#fields.hasErrors('pickupDate')}">
+							Please provide pick-up date
+						</div>
+					</div>
+				</div>		
+				<!-- <div class="form-group row">
+					<label class="col-sm-2 col-form-label">Product</label>
+					<div class="col-sm-3">
+						<input id="productName" class="form-control" th:classappend="${#fields.hasErrors('product')} ? is-invalid : ''" th:field="*{productName}"  />
+						<input id="productValue" type="hidden" th:field="*{product}" />
+						<div class="invalid-feedback" th:if="${#fields.hasErrors('product')}">
+							<p th:each="err : ${#fields.errors('product')}" th:text="${err}"></p>
+						</div>						
+					</div>
+				</div> -->
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Price</label>
+					<div class="col-sm-3">
+						<input class="form-control" type="text" name="price" value="1" readonly />
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Color</label>
+					<div class="col-sm-3">
+						<select class="form-control" th:field="${mto.color.id}">
+							<option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.code + '-' + color.name}"></option>
+						</select>
+					</div>
+				</div>				
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Sewer</label>
+					<div class="col-sm-3">
+						<select class="form-control" th:field="*{employee}">
+							<option th:each="employee : ${employees}" th:value="${employee.id}" th:text="${employee.lastname + ', ' + employee.firstname}"></option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<input class="btn btn-primary" type="submit" value="Submit" /><input class="btn btn-secondary" type="reset" value="Reset" />
+					<input type="hidden" th:field="*{id}"/>
+				</div>
+			</form>
+		</div>
+
+	</div>
+	<!-- /.container -->
+	<table id="grid-basic" class="table table-condensed table-hover table-striped">
+	    <thead>
+	        <tr>
+	            <th>ID</th>
+	            <th>Order Date</th>
+	            <th>Pickup Date</th>
+	            <th>Product</th>
+	            <th>Color</th>
+	            <th>Size</th>
+	            <th>Customer</th>
+	            <th>Sewer</th>
+	            <th>Status</th>
+	            <th>Price</th>
+	        </tr>
+	    </thead>
+	    <tfoot>
+	        <tr>
+	            <th>ID</th>
+	            <th>Order Date</th>
+	            <th>Pickup Date</th>
+	            <th>Product</th>
+	            <th>Color</th>
+	            <th>Size</th>
+	            <th>Customer</th>
+	            <th>Sewer</th>
+	            <th>Status</th>
+	            <th>Price</th>
+	        </tr>
+	    </tfoot>    
+	</table>
+	
+	<div th:replace="include/footer :: footer">
+		<!-- INSERT FOOTER HERE -->
+	</div>
+	<script type="text/javascript">
+	var table = $("#grid-basic").DataTable({
+		"ajax": 'http://localhost:8888/inv/api/getallmtos',
+		"deferRender": true
+	});
+	
+	$("input[id='pickup-date']").datetimepicker({
+		format: 'mm/dd/yyyy',
+		todayHighlight: true,
+		orientation: 'bottom right',
+		autoclose: true,
+		pickTime: false,
+		minView: 2
+	});
+	
+	$("input[id='order-date']").datetimepicker({
+		format: 'mm/dd/yyyy',
+		todayHighlight: true,
+		orientation: 'bottom right',
+		autoclose: true,
+		pickTime: false,
+		minView: 2
+	});
+	
+	//For changing status
+	$('#grid-basic tbody').on('dblclick', 'tr', function () {
+		var data = table.row( this ).data();
+		alert( 'You clicked on '+data[1]+'\'s row' );
+	});
+
+	</script>
+</body>
+</html>

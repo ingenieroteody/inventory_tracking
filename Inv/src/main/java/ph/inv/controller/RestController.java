@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ph.inv.bean.AuditDisplay;
 import ph.inv.bean.CurrentInventory;
 import ph.inv.bean.DataTable;
 import ph.inv.bean.Pagination;
@@ -22,8 +23,10 @@ import ph.inv.entity.Employee;
 import ph.inv.entity.Inventory;
 import ph.inv.entity.Product;
 import ph.inv.service.ColorService;
+import ph.inv.service.CustomerService;
 import ph.inv.service.EmployeeService;
 import ph.inv.service.InventoryService;
+import ph.inv.service.MTOService;
 import ph.inv.service.ProductService;
 import ph.inv.util.StringUtil;
 
@@ -42,6 +45,12 @@ public class RestController {
 	
 	@Autowired
 	private InventoryService inventoryService;
+	
+	@Autowired
+	private CustomerService customerService;
+	
+	@Autowired
+	private MTOService mtoService;
 	
 	@RequestMapping(path="/getallproducts", method=RequestMethod.GET)
 	public DataTable<String> getAllProducts(@RequestParam MultiValueMap<String, String> params) {
@@ -146,20 +155,76 @@ public class RestController {
 	
 	
 	@RequestMapping(path="/auditinventory", method=RequestMethod.GET, produces="application/json")
-	public List<Object []> auditInventory(@RequestParam MultiValueMap<String, String> params) {
+	public List<AuditDisplay> auditInventory(@RequestParam MultiValueMap<String, String> params) {
 		List<Object []> inventory = inventoryService.getAuditTrail(Long.parseLong(params.getFirst("id")));
 		
+		List<AuditDisplay> auditDisplays = new ArrayList<AuditDisplay>();
+		
+		
 		for(Object [] o : inventory) {
+			List<String> jsonData = new LinkedList<String>();
 			final Inventory i = (Inventory) o[0];
 			final DefaultRevisionEntity revision = (DefaultRevisionEntity) o[1];
 			System.out.println(i);
-			System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").format(revision.getRevisionDate()) + " : " + revision.getTimestamp());
-			System.out.println(o[2]); 
+			System.out.println(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.S").format(revision.getRevisionDate()) + " : " + revision.getTimestamp());
+			System.out.println(o[2]+"");
+			
+			jsonData.add(i.getDate());
+			jsonData.add(i.getNumberCode());
+			jsonData.add(i.getProductName());
+			jsonData.add(i.getColor().getName());
+			jsonData.add(i.getSize().getValue());
+			jsonData.add(i.getStatus().getValue());
+			jsonData.add(i.getEmployee().getCompleteName());
+			
+			AuditDisplay auditDisplay = new AuditDisplay();
+			auditDisplay.setRevisionDate(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.S").format(revision.getRevisionDate()));
+			auditDisplay.setEventType(o[2]+"");
+			auditDisplay.setFields(jsonData);
+			
+			auditDisplays.add(auditDisplay);
 		}
 		
-		return inventory;
+		return auditDisplays;
 	}
 	
+	@RequestMapping(path="/getallmtos", method=RequestMethod.GET) 
+	public DataTable<String> getAllMTOs(@RequestParam MultiValueMap<String, String> params) { 
+		DataTable<String> dataTable = new DataTable<String>();
+		List<List<String>> jsonEmployees = new ArrayList<List<String>>();
+		List<Employee> employees = employeeService.findAll();
+		
+		for(Employee e : employees) {
+			List<String> jsonData = new LinkedList<String>();
+			jsonData.add(e.getId()+"");
+			jsonData.add(e.getFirstname());
+			jsonData.add(e.getLastname());
+			jsonData.add(e.getPosition().getValue());
+			jsonEmployees.add(jsonData);
+		}
+		dataTable.setData(jsonEmployees);
+
+		return dataTable;
+	}	
+	
+	@RequestMapping(path="/getallcustomers", method=RequestMethod.GET) 
+	public DataTable<String> getAllCustomers(@RequestParam MultiValueMap<String, String> params) { 
+		DataTable<String> dataTable = new DataTable<String>();
+		List<List<String>> jsonEmployees = new ArrayList<List<String>>();
+		List<Employee> employees = employeeService.findAll();
+		
+		for(Employee e : employees) {
+			List<String> jsonData = new LinkedList<String>();
+			jsonData.add(e.getId()+"");
+			jsonData.add(e.getFirstname());
+			jsonData.add(e.getLastname());
+			jsonData.add(e.getPosition().getValue());
+			jsonEmployees.add(jsonData);
+		}
+		dataTable.setData(jsonEmployees);
+
+		return dataTable;
+	}		
 	
 	@RequestMapping(path="/findproduct", method=RequestMethod.GET, produces="application/json")
 	public List<Product> findProduct(@RequestParam MultiValueMap<String, String> params) {
