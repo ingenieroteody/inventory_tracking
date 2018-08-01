@@ -84,7 +84,7 @@
 					<label class="col-sm-2 col-form-label">Status</label>
 						<div class="col-sm-3">
 						<select class="form-control" th:field="${inventory.status}">
-							<option th:each="stat : ${T(ph.inv.enums.StatusEnum).values()}" th:value="${stat}" th:text="${stat.value}"></option>
+							<option th:each="stat : ${T(ph.inv.enums.RtwStatusEnum).values()}" th:value="${stat}" th:text="${stat.value}"></option>
 						</select>
 					</div>
 				</div>		

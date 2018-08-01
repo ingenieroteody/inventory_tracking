@@ -1,6 +1,6 @@
 package ph.inv.enums;
 
-public enum StatusEnum {
+public enum RtwStatusEnum {
 	IN_STOCK("In Stock"),
 	DELIVERED_ATC("Delivered at ATC"),
 	DELIVERED_GLO("Delivered at Glorieta"),
@@ -8,7 +8,7 @@ public enum StatusEnum {
 	
 	private String value;
 	
-	private StatusEnum(String value) {
+	private RtwStatusEnum(String value) {
 		this.value = value;
 	}
 	

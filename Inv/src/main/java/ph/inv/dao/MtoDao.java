@@ -1,5 +1,5 @@
 package ph.inv.dao;
 
-public interface MTODao {
+public interface MtoDao {
 
 }

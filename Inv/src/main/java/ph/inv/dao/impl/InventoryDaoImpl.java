@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository;
 import ph.inv.bean.CurrentInventory;
 import ph.inv.dao.InventoryDao;
 import ph.inv.entity.Inventory;
+import ph.inv.enums.RtwStatusEnum;
 import ph.inv.enums.SizeEnum;
-import ph.inv.enums.StatusEnum;
 
 @Repository(value="inventoryDao")
 public class InventoryDaoImpl extends AbstractDaoImpl<Inventory, Long> implements InventoryDao{
@@ -56,7 +56,7 @@ public class InventoryDaoImpl extends AbstractDaoImpl<Inventory, Long> implement
 		queryBuilder.append("GROUP BY i.numberCode, p.code, p.name, i.status, c.name, i.size HAVING i.status = :status");
 	
 		Query query = entityManager.createQuery(queryBuilder.toString());
-		query.setParameter("status", StatusEnum.IN_STOCK);
+		query.setParameter("status", RtwStatusEnum.IN_STOCK);
 		
 		@SuppressWarnings("unchecked")
 		List<Object []> queries = query.getResultList();
@@ -66,7 +66,7 @@ public class InventoryDaoImpl extends AbstractDaoImpl<Inventory, Long> implement
 			i.setQuantity((Long) q[0]);
 			i.setItemCode((String) q[1]);
 			i.setItemName((String) q[2] + " - " + (String) q[3]);
-			i.setItemStatus((StatusEnum) q[4]);
+			i.setItemStatus((RtwStatusEnum) q[4]);
 			i.setColorName((String) q[5]);
 			i.setItemSize((SizeEnum) q[6]);
 			currentInventory.add(i);

@@ -99,7 +99,7 @@
 	//For changing status
 	$('#grid-basic tbody').on('dblclick', 'tr', function () {
 		var data = table.row( this ).data();
-		alert( 'You clicked on '+data[1]+'\'s row' );
+		window.location.href = "http://localhost:8888/inv/customer/edit/" + data[0];
 	});
 
 	</script>

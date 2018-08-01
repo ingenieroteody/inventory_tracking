@@ -1,7 +1,7 @@
 package ph.inv.bean;
 
+import ph.inv.enums.RtwStatusEnum;
 import ph.inv.enums.SizeEnum;
-import ph.inv.enums.StatusEnum;
 
 public class CurrentInventory {
 	
@@ -13,7 +13,7 @@ public class CurrentInventory {
 	
 	private SizeEnum itemSize;
 
-	private StatusEnum itemStatus;
+	private RtwStatusEnum itemStatus;
 	
 	private String colorName;
 
@@ -49,11 +49,11 @@ public class CurrentInventory {
 		this.itemSize = itemSize;
 	}
 
-	public StatusEnum getItemStatus() {
+	public RtwStatusEnum getItemStatus() {
 		return itemStatus;
 	}
 
-	public void setItemStatus(StatusEnum itemStatus) {
+	public void setItemStatus(RtwStatusEnum itemStatus) {
 		this.itemStatus = itemStatus;
 	}
 

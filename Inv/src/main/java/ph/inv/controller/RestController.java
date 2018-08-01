@@ -4,10 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.envers.DefaultRevisionEntity;
-import org.hibernate.envers.RevisionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,18 +15,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ph.inv.bean.AuditDisplay;
 import ph.inv.bean.CurrentInventory;
 import ph.inv.bean.DataTable;
-import ph.inv.bean.Pagination;
 import ph.inv.entity.Color;
+import ph.inv.entity.Customer;
 import ph.inv.entity.Employee;
 import ph.inv.entity.Inventory;
+import ph.inv.entity.Mto;
 import ph.inv.entity.Product;
 import ph.inv.service.ColorService;
 import ph.inv.service.CustomerService;
 import ph.inv.service.EmployeeService;
 import ph.inv.service.InventoryService;
-import ph.inv.service.MTOService;
+import ph.inv.service.MtoService;
 import ph.inv.service.ProductService;
-import ph.inv.util.StringUtil;
 
 @org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api")
@@ -50,7 +48,7 @@ public class RestController {
 	private CustomerService customerService;
 	
 	@Autowired
-	private MTOService mtoService;
+	private MtoService mtoService;
 	
 	@RequestMapping(path="/getallproducts", method=RequestMethod.GET)
 	public DataTable<String> getAllProducts(@RequestParam MultiValueMap<String, String> params) {
@@ -191,18 +189,24 @@ public class RestController {
 	@RequestMapping(path="/getallmtos", method=RequestMethod.GET) 
 	public DataTable<String> getAllMTOs(@RequestParam MultiValueMap<String, String> params) { 
 		DataTable<String> dataTable = new DataTable<String>();
-		List<List<String>> jsonEmployees = new ArrayList<List<String>>();
-		List<Employee> employees = employeeService.findAll();
+		List<List<String>> jsonMTOs = new ArrayList<List<String>>();
+		List<Mto> mtos = mtoService.findAll();
 		
-		for(Employee e : employees) {
+		for(Mto e : mtos) {
 			List<String> jsonData = new LinkedList<String>();
 			jsonData.add(e.getId()+"");
-			jsonData.add(e.getFirstname());
-			jsonData.add(e.getLastname());
-			jsonData.add(e.getPosition().getValue());
-			jsonEmployees.add(jsonData);
+			jsonData.add(e.getOrderDate());
+			jsonData.add(e.getPickupDate());
+			jsonData.add(e.getProduct().getCode() + " " + e.getProduct().getName());
+			jsonData.add(e.getColor().getName());
+			jsonData.add(e.getSize().getValue());
+			jsonData.add(e.getCustomer().toString());
+			jsonData.add(e.getEmployee().getCompleteName());
+			jsonData.add(e.getStatus().getValue());
+			jsonData.add(e.getPrice()+"");
+			jsonMTOs.add(jsonData);
 		}
-		dataTable.setData(jsonEmployees);
+		dataTable.setData(jsonMTOs);
 
 		return dataTable;
 	}	
@@ -210,18 +214,20 @@ public class RestController {
 	@RequestMapping(path="/getallcustomers", method=RequestMethod.GET) 
 	public DataTable<String> getAllCustomers(@RequestParam MultiValueMap<String, String> params) { 
 		DataTable<String> dataTable = new DataTable<String>();
-		List<List<String>> jsonEmployees = new ArrayList<List<String>>();
-		List<Employee> employees = employeeService.findAll();
+		List<List<String>> jsonCustomers = new ArrayList<List<String>>();
+		List<Customer> customers = customerService.findAll();
 		
-		for(Employee e : employees) {
+		for(Customer e : customers) {
 			List<String> jsonData = new LinkedList<String>();
 			jsonData.add(e.getId()+"");
 			jsonData.add(e.getFirstname());
 			jsonData.add(e.getLastname());
-			jsonData.add(e.getPosition().getValue());
-			jsonEmployees.add(jsonData);
+			jsonData.add(e.getMobileNumber());
+			jsonData.add(e.getEmailAddress());
+			jsonData.add(e.getAddress());
+			jsonCustomers.add(jsonData);
 		}
-		dataTable.setData(jsonEmployees);
+		dataTable.setData(jsonCustomers);
 
 		return dataTable;
 	}		

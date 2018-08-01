@@ -26,11 +26,11 @@
 				<div class="form-group row ">
 					<label class="col-sm-2 col-form-label">Order Date</label>
 					<div class="col-sm-3 input-append date">
-						<input id="order-date" class="form-control" th:classappend="${#fields.hasErrors('orderDate')} ? is-invalid : ''" type="text" th:text="${#dates.format(date, 'mm/dd/yyyy')}" th:field="*{orderDate}" placeholder="MM/DD/YYYY" maxlength="10" readonly />
+						<input id="order-date" class="form-control" th:classappend="${#fields.hasErrors('orderDate')} ? is-invalid : ''" type="text" th:text="${#dates.format(orderDate, 'mm/dd/yyyy')}" th:field="*{orderDate}" placeholder="MM/DD/YYYY" maxlength="10" readonly />
 						<span class="add-on"><i class="icon-calendar" id="cal-order"></i></span>
 						<div class="invalid-feedback" th:if="${#fields.hasErrors('orderDate')}">
-							Please provide order date
-						</div>
+							<p th:each="err : ${#fields.errors('orderDate')}" th:text="${err}"></p>
+						</div>	
 					</div>
 				</div>
 				<div class="form-group row ">
@@ -39,11 +39,11 @@
 						<input id="pickup-date" class="form-control" th:classappend="${#fields.hasErrors('pickupDate')} ? is-invalid : ''" type="text" th:text="${#dates.format(pickupDate, 'mm/dd/yyyy')}" th:field="*{pickupDate}" placeholder="MM/DD/YYYY" maxlength="10" readonly />
 						<span class="add-on"><i class="icon-calendar" id="cal-pickup"></i></span>
 						<div class="invalid-feedback" th:if="${#fields.hasErrors('pickupDate')}">
-							Please provide pick-up date
-						</div>
+							<p th:each="err : ${#fields.errors('pickupDate')}" th:text="${err}"></p>
+						</div>	
 					</div>
 				</div>		
-				<!-- <div class="form-group row">
+				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">Product</label>
 					<div class="col-sm-3">
 						<input id="productName" class="form-control" th:classappend="${#fields.hasErrors('product')} ? is-invalid : ''" th:field="*{productName}"  />
@@ -51,12 +51,6 @@
 						<div class="invalid-feedback" th:if="${#fields.hasErrors('product')}">
 							<p th:each="err : ${#fields.errors('product')}" th:text="${err}"></p>
 						</div>						
-					</div>
-				</div> -->
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Price</label>
-					<div class="col-sm-3">
-						<input class="form-control" type="text" name="price" value="1" readonly />
 					</div>
 				</div>
 				<div class="form-group row">
@@ -66,7 +60,23 @@
 							<option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.code + '-' + color.name}"></option>
 						</select>
 					</div>
-				</div>				
+				</div>		
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Size</label>
+					<div class="col-sm-3">
+						<select class="form-control" th:field="${mto.size}">
+							<option th:each="size : ${T(ph.inv.enums.SizeEnum).values()}" th:value="${size}" th:text="${size.value}"></option>
+						</select>
+					</div>
+				</div>	
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Customer</label>
+					<div class="col-sm-3">
+						<select class="form-control" th:field="*{customer}">
+							<option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.lastname + ', ' + customer.firstname}"></option>
+						</select>
+					</div>
+				</div>
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">Sewer</label>
 					<div class="col-sm-3">
@@ -75,6 +85,23 @@
 						</select>
 					</div>
 				</div>
+				<div class="form-group row" th:if="${mto.id} != 0">
+					<label class="col-sm-2 col-form-label">Status</label>
+						<div class="col-sm-3">
+						<select class="form-control" th:field="${mto.status}">
+							<option th:each="stat : ${T(ph.inv.enums.MtoStatusEnum).values()}" th:value="${stat}" th:text="${stat.value}"></option>
+						</select>
+					</div>
+				</div>		
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label">Price</label>
+					<div class="col-sm-3">
+						<input class="form-control" th:classappend="${#fields.hasErrors('price')} ? is-invalid : ''" type="text" th:text="${price}" th:field="*{price}" placeholder="0.00" maxlength="10" />
+						<div class="invalid-feedback" th:if="${#fields.hasErrors('price')}">
+							<p th:each="err : ${#fields.errors('price')}" th:text="${err}"></p>
+						</div>	
+					</div>
+				</div>				
 				<div class="form-group row">
 					<input class="btn btn-primary" type="submit" value="Submit" /><input class="btn btn-secondary" type="reset" value="Reset" />
 					<input type="hidden" th:field="*{id}"/>
@@ -118,6 +145,8 @@
 	<div th:replace="include/footer :: footer">
 		<!-- INSERT FOOTER HERE -->
 	</div>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap-datetimepicker/2.4.2/js/bootstrap-datetimepicker.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js}"></script>
 	<script type="text/javascript">
 	var table = $("#grid-basic").DataTable({
 		"ajax": 'http://localhost:8888/inv/api/getallmtos',
@@ -145,9 +174,51 @@
 	//For changing status
 	$('#grid-basic tbody').on('dblclick', 'tr', function () {
 		var data = table.row( this ).data();
-		alert( 'You clicked on '+data[1]+'\'s row' );
+		window.location.href = "http://localhost:8888/inv/mto/edit/" + data[0];
 	});
-
+	
+	$("input[id='productName']").autocomplete({
+		source: function(request,response) {
+			$.ajax({
+				url: "http://localhost:8888/inv/api/findproduct",
+				type: "GET",
+				dataType: "json",
+				data: "keyword=" + $("#productName").val(),
+				success: function(data) {
+					if(!data.length) {
+						var noResultMessage = [{
+							id: " - ",
+							name: "No matches found"
+						}] ;
+						response(noResultMessage);
+					} else {
+						response(data);
+					}	
+				}
+			});
+		},
+		minLength: 3,
+		search: function(){
+			$(this).addClass('working');
+		},
+		open: function() {
+			$(this).removeClass('working');
+		},
+		select: function(event, ui) {
+			if(ui.item.id==" - ") {
+				this.value = "";
+				$("#productValue").val("");
+				return false;
+			}
+			$("#productValue").val(ui.item.id);
+		    this.value = "[" + ui.item.code + "] " + ui.item.name;
+		    return false;
+		}
+	}).autocomplete("instance")._renderItem = function( ul, item ) {
+	      return $("<li>")
+	        .append("<div>[" + item.id + "] " + item.name + "</div>")
+	        .appendTo(ul);
+	};
 	</script>
 </body>
 </html>

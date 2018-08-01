@@ -66,4 +66,9 @@ public class Customer extends BaseEntity {
 		this.address = address;
 	}
 	
+	
+	@Override
+	public String toString() {
+		return lastname + ", " + firstname;
+	}
 }

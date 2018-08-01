@@ -1,7 +1,5 @@
 package ph.inv.entity;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,17 +7,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.envers.Audited;
 
 import ph.inv.annotation.Searchable;
+import ph.inv.enums.RtwStatusEnum;
 import ph.inv.enums.SizeEnum;
-import ph.inv.enums.StatusEnum;
 
 @Entity
 @Audited
@@ -59,13 +54,13 @@ public class Inventory extends BaseEntity{
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="status", length=25, nullable=false)
-	private StatusEnum status;
+	private RtwStatusEnum status;
 	
 	@Transient
 	private String productName;
 	
 	public Inventory() {
-		this.status = StatusEnum.IN_STOCK;
+		this.status = RtwStatusEnum.IN_STOCK;
 	}
 	
 	public String getDate() {
@@ -124,11 +119,11 @@ public class Inventory extends BaseEntity{
 		this.color = color;
 	}
 
-	public StatusEnum getStatus() {
+	public RtwStatusEnum getStatus() {
 		return status;
 	}
 
-	public void setStatus(StatusEnum status) {
+	public void setStatus(RtwStatusEnum status) {
 		this.status = status;
 	}
 
