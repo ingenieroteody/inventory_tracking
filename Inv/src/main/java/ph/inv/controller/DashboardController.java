@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import ph.inv.service.InventoryService;
@@ -20,4 +21,9 @@ public class DashboardController {
 		model.put("message", "Hi dashboard!");
 		return "dashboard";
 	}
+	
+    @GetMapping("/login")
+    public String login() {
+        return "/login";
+    }
 }
