@@ -5,15 +5,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import ph.inv.entity.Color;
 import ph.inv.entity.Employee;
 import ph.inv.entity.Product;
+import ph.inv.entity.RoleAuthority;
+import ph.inv.entity.User;
+import ph.inv.entity.UserRole;
 import ph.inv.enums.PositionEnum;
 import ph.inv.service.ColorService;
 import ph.inv.service.EmployeeService;
 import ph.inv.service.ProductService;
+import ph.inv.service.RoleAuthorityService;
+import ph.inv.service.UserRoleService;
+import ph.inv.service.UserService;
 
 @Component
 public class ApplicationListener {
@@ -28,6 +35,15 @@ public class ApplicationListener {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private RoleAuthorityService roleAuthorityService;
+	
+	@Autowired
+	private UserRoleService userRoleService;
 	
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent e) {
@@ -98,5 +114,27 @@ public class ApplicationListener {
 			LOG.info("product table initialization skipped");
 		}
 		
+
+		
+		
+
+		
+		if(userService.findAll().size() == 0){
+			User user = new User();
+			user.setUsername("ydoet");
+			BCryptPasswordEncoder encode = new BCryptPasswordEncoder();
+			user.setPassword(encode.encode("ingeniero.teody"));
+			userService.save(user);
+			
+			UserRole userRole = new UserRole();
+			userRole.setUser(user);
+			userRoleService.save(userRole);
+			
+			RoleAuthority roleAuthority = new RoleAuthority();
+			roleAuthority.setDescription("Can do anything");
+			roleAuthority.setName("Super");
+			roleAuthority.setUserRole(userRole);
+			roleAuthorityService.save(roleAuthority);
+		}
 	}
 }
