@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-@Component()
+@Component(value="accessDeniedHandler")
 public class AccessDeniedHandler implements org.springframework.security.web.access.AccessDeniedHandler {
 
 	private static Logger logger = LoggerFactory.getLogger(AccessDeniedHandler.class);
@@ -28,7 +28,7 @@ public class AccessDeniedHandler implements org.springframework.security.web.acc
             + arg0.getRequestURI());
 		}
 		
-		arg1.sendRedirect(arg0.getContextPath() + "/403");
+		arg1.sendRedirect(arg0.getContextPath() + "/access-denied");
 	}
 
 }

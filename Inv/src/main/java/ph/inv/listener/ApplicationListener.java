@@ -132,9 +132,24 @@ public class ApplicationListener {
 			
 			RoleAuthority roleAuthority = new RoleAuthority();
 			roleAuthority.setDescription("Can do anything");
-			roleAuthority.setName("Super");
+			roleAuthority.setAuthority("ADMIN");
 			roleAuthority.setUserRole(userRole);
 			roleAuthorityService.save(roleAuthority);
+			
+			User userStaff = new User();
+			userStaff.setUsername("meann");
+			userStaff.setPassword(encode.encode("meannpassword"));
+			userService.save(userStaff);
+			
+			UserRole userRoleStaff = new UserRole();
+			userRoleStaff.setUser(userStaff);
+			userRoleService.save(userRoleStaff);
+			
+			RoleAuthority roleAuthorityStaff = new RoleAuthority();
+			roleAuthorityStaff.setDescription("Post MTO");
+			roleAuthorityStaff.setAuthority("STAFF");
+			roleAuthorityStaff.setUserRole(userRoleStaff);
+			roleAuthorityService.save(roleAuthorityStaff);
 		}
 	}
 }

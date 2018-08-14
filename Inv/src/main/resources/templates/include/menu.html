@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 <title>Spring Boot Thymeleaf Hello World Example</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -24,6 +25,12 @@
 						<li class="nav-item" ><a class="nav-link" th:href="@{/audit/}" th:classappend="${menu}=='audit' ? active : ''">Audit</a></li>
 					</ul>
 				</div>
+				
+				<div sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
+				                    | Logged user: <span th:text="${#authentication.getPrincipal().getUsername()}"></span> |
+                    Roles: <span sec:authentication="principal.authorities"></span> |
+              		<a th:href="@{/logout}">Sign Out</a>
+           		</div>
 			</nav>
 		</div>
 	</div>

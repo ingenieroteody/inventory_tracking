@@ -34,6 +34,7 @@ spring:
 logging:
   level:
     org.springframework.web: ERROR
+    org.springframework.security: ERROR
     ph.inv: ERROR
     org.hibernate.SQL: ERROR
     org.hibernate.type.descriptor.sql.BasicBinder: ERROR

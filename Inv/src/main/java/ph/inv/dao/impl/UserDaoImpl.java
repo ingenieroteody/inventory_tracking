@@ -28,7 +28,6 @@ public class UserDaoImpl extends AbstractDaoImpl<User, Long> implements UserDao{
 		Query query = entityManager.createQuery(criteriaQuery);
 		if(query.getResultList().size() != 0) {
 			User u = (User) query.getSingleResult();
-			System.out.println("UserSize: " + query.getResultList().size());
 			return u;
 		} else {
 			throw new UsernameNotFoundException("");
