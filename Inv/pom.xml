@@ -96,7 +96,11 @@
 		    <artifactId>json</artifactId>
 		    <version>20180130</version>
 		</dependency>
-		
+		<dependency>
+	        <groupId>org.thymeleaf.extras</groupId>
+	        <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+	        <version>3.0.2.RELEASE</version>
+	    </dependency>
     </dependencies>
 
     <properties>

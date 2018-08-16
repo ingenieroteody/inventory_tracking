@@ -28,7 +28,10 @@
 				
 				<div sec:authorize="isAuthenticated()" class="nav navbar-nav navbar-right">
 				                    | Logged user: <span th:text="${#authentication.getPrincipal().getUsername()}"></span> |
-                    Roles: <span sec:authentication="principal.authorities"></span> |
+                    Roles:   <p th:each="authority : ${#authentication.getAuthorities()}"
+						       th:if="${authority.getAuthority().startsWith('ROLE_')}"
+						       th:text="${authority.getAuthority().replaceFirst('ROLE_', '')}">
+						    </p> |
               		<a th:href="@{/logout}">Sign Out</a>
            		</div>
 			</nav>

@@ -1,5 +1,6 @@
 package ph.inv.entity;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Audited
 @Table(name="user")
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails, Serializable {
 
 	@Column(name="username", columnDefinition="VARCHAR(50)", nullable=false, unique=true)
 	private String username;
@@ -68,11 +69,9 @@ public class User extends BaseEntity implements UserDetails {
 
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<RoleAuthority> authorities = new HashSet<RoleAuthority>();
-		System.out.println("Username: " + username);
 		for(UserRole role : roles) {
 			for(RoleAuthority roleAuthority : role.getAuthorities()) {
 				authorities.add(roleAuthority);
-				System.err.println("   Authority: " + roleAuthority.getAuthority());
 			}
 		}
 		return authorities;

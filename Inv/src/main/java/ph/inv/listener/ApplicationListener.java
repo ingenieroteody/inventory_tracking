@@ -48,29 +48,9 @@ public class ApplicationListener {
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent e) {
 		
-		if(employeeService.findAll().size() == 0) {
-			Employee rosalina = new Employee();
-			rosalina.setFirstname("Rosalina");
-			rosalina.setLastname("Sarmiento");
-			rosalina.setPosition(PositionEnum.PATTERN_CUT_AND_SEW);
-			employeeService.save(rosalina);
-			
-			Employee nenita = new Employee();
-			nenita.setFirstname("Nenita");
-			nenita.setLastname("Esguerra");
-			nenita.setPosition(PositionEnum.SEWER);
-			employeeService.save(nenita);
-			
-			Employee michael = new Employee();
-			michael.setFirstname("Michael");
-			michael.setLastname("Hipolito");
-			michael.setPosition(PositionEnum.CUTTER);
-			employeeService.save(michael);
-			
-			LOG.info("Default employees are inserted");
-		} else {
-			LOG.info("employee table initialization skipped");
-		}
+		initializeUser();
+		
+		initializeStaff();
 		
 		if(colorService.findAll().size() == 0) {
 			Color blue = new Color();
@@ -113,12 +93,9 @@ public class ApplicationListener {
 		} else {
 			LOG.info("product table initialization skipped");
 		}
-		
-
-		
-		
-
-		
+	}
+	
+	private void initializeUser() {
 		if(userService.findAll().size() == 0){
 			User user = new User();
 			user.setUsername("ydoet");
@@ -150,6 +127,44 @@ public class ApplicationListener {
 			roleAuthorityStaff.setAuthority("STAFF");
 			roleAuthorityStaff.setUserRole(userRoleStaff);
 			roleAuthorityService.save(roleAuthorityStaff);
+		}		
+	}
+	
+	private void initializeStaff() {
+		if(employeeService.findAll().size() == 0) {
+			Employee rosalina = new Employee();
+			rosalina.setFirstname("Rosalina");
+			rosalina.setLastname("Sarmiento");
+			rosalina.setPosition(PositionEnum.PATTERN_CUT_AND_SEW);
+			employeeService.save(rosalina);
+			
+			Employee nenita = new Employee();
+			nenita.setFirstname("Nenita");
+			nenita.setLastname("Esguerra");
+			nenita.setPosition(PositionEnum.SEWER);
+			employeeService.save(nenita);
+	
+			Employee riza = new Employee();
+			riza.setFirstname("Riza");
+			riza.setLastname("");
+			riza.setPosition(PositionEnum.SEWER);
+			employeeService.save(riza);
+			
+			Employee helen = new Employee();
+			helen.setFirstname("Helen");
+			helen.setLastname("");
+			helen.setPosition(PositionEnum.SEWER);
+			employeeService.save(riza);
+			
+			Employee michael = new Employee();
+			michael.setFirstname("Michael");
+			michael.setLastname("Hipolito");
+			michael.setPosition(PositionEnum.CUTTER);
+			employeeService.save(michael);
+			
+			LOG.info("Default employees are inserted");
+		} else {
+			LOG.info("employee table initialization skipped");
 		}
 	}
 }
