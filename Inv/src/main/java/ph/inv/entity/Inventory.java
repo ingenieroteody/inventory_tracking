@@ -56,6 +56,9 @@ public class Inventory extends BaseEntity{
 	@Column(name="status", length=25, nullable=false)
 	private RtwStatusEnum status;
 	
+	@Column(name="price", nullable=false)
+	private Double price;
+	
 	@Transient
 	private String productName;
 	
@@ -134,6 +137,14 @@ public class Inventory extends BaseEntity{
 
 	public void setProductName(String productName) {
 		this.productName = productName;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 	
 }

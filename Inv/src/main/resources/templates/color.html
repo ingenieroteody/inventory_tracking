@@ -17,9 +17,9 @@
 	</div>
 	
 	<div class="container">
-		<div class="alert alert-success" role="alert">
+		<!-- <div class="alert alert-success" role="alert">
 			"HUWAT"
-		</div>
+		</div>  -->
 
 	</div>
 	
@@ -86,7 +86,7 @@
 	//For changing status
 	$('#grid-basic tbody').on('dblclick', 'tr', function () {
 		var data = table.row( this ).data();
-		alert( 'You clicked on '+data[1]+'\'s row' );
+		window.location.href = "http://localhost:8888/inv/color/edit/" + data[0];
 	});
 	/* var grid = $("#grid-basic").bootgrid({
 		url: "http://localhost:8888/inv/api/getallcolors",

@@ -43,7 +43,7 @@
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">Product</label>
 					<div class="col-sm-3">
-						<input id="productName" class="form-control" th:classappend="${#fields.hasErrors('product')} ? is-invalid : ''" th:field="*{productName}"  />
+						<input id="productName" class="form-control" th:classappend="${#fields.hasErrors('product')} ? is-invalid : ''" th:field="*{productName}" th:readonly="${inventory.id != 0}" />
 						<input id="productValue" type="hidden" th:field="*{product}" />
 						<div class="invalid-feedback" th:if="${#fields.hasErrors('product')}">
 							<p th:each="err : ${#fields.errors('product')}" th:text="${err}"></p>
@@ -91,6 +91,7 @@
 				<div class="form-group row">
 					<input class="btn btn-primary" type="submit" value="Submit" /><input class="btn btn-secondary" type="reset" value="Reset" />
 					<input type="hidden" th:field="*{id}"/>
+					<input type="hidden" th:field="*{price}" th:readonly="${inventory.id != 0}"/>
 				</div>
 			</form>
 		</div>
@@ -107,6 +108,7 @@
 	            <th>Product</th>
 	            <th>Color</th>
 	            <th>Size</th>
+	            <th>Price</th>
 	            <th>Status</th>
 	            <th>Sewer</th>
 	        </tr>
@@ -119,6 +121,7 @@
 	            <th>Product</th>
 	            <th>Color</th>
 	            <th>Size</th>
+	            <th>Price</th>
 	            <th>Status</th>
 	            <th>Sewer</th>
 	    	</tr>
@@ -264,6 +267,7 @@
 					return false;
 				}
 				$("#productValue").val(ui.item.id);
+				$("#price").val(ui.item.price);
 			    this.value = "[" + ui.item.code + "] " + ui.item.name;
 			    return false;
 			}

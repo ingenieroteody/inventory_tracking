@@ -61,6 +61,7 @@ public class RestController {
 			jsonData.add(p.getId()+"");
 			jsonData.add(p.getCode());
 			jsonData.add(p.getName());
+			jsonData.add(p.getPrice()+"");
 			jsonProducts.add(jsonData);
 		}
 		dataTable.setData(jsonProducts);
@@ -120,6 +121,7 @@ public class RestController {
 			final String colorName = "[" + i.getColor().getCode() + "] " + i.getColor().getName();
 			jsonData.add(colorName);
 			jsonData.add(i.getSize().getValue());
+			jsonData.add(i.getPrice()+"");
 			jsonData.add(i.getStatus().getValue());
 			final String employeeName = i.getEmployee().getLastname() + ", " + i.getEmployee().getFirstname();
 			jsonData.add(employeeName);

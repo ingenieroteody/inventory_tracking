@@ -26,6 +26,9 @@ public class Product extends BaseEntity {
 	@Searchable
 	private String code;
 	
+	@Column(name="price", nullable=false)
+	private Double price;
+	
 	public String getName() {
 		return name;
 	}
@@ -40,5 +43,13 @@ public class Product extends BaseEntity {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 }
