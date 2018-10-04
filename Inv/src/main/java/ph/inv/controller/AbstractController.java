@@ -92,7 +92,7 @@ public abstract class AbstractController<T extends BaseEntity> {
 			service.update(entity);
 		else
 			service.save(entity);
-		
+
 		return "redirect:/" + entityName + "/";
 	}
 }

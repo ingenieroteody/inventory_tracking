@@ -4,6 +4,7 @@ public enum RtwStatusEnum {
 	IN_STOCK("In Stock"),
 	DELIVERED_ATC("Delivered at ATC"),
 	DELIVERED_GLO("Delivered at Glorieta"),
+	CHANGE_ITEM("Change Item"),
 	SOLD("Sold");
 	
 	private String value;

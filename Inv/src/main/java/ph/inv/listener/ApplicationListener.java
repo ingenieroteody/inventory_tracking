@@ -12,6 +12,7 @@ import ph.inv.entity.Color;
 import ph.inv.entity.Employee;
 import ph.inv.entity.Product;
 import ph.inv.entity.RoleAuthority;
+import ph.inv.entity.SystemCodes;
 import ph.inv.entity.User;
 import ph.inv.entity.UserRole;
 import ph.inv.enums.PositionEnum;
@@ -19,6 +20,7 @@ import ph.inv.service.ColorService;
 import ph.inv.service.EmployeeService;
 import ph.inv.service.ProductService;
 import ph.inv.service.RoleAuthorityService;
+import ph.inv.service.SystemCodesService;
 import ph.inv.service.UserRoleService;
 import ph.inv.service.UserService;
 
@@ -45,12 +47,17 @@ public class ApplicationListener {
 	@Autowired
 	private UserRoleService userRoleService;
 	
+	@Autowired
+	private SystemCodesService systemCodesService;
+	
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent e) {
 		
 		initializeUser();
 		
 		initializeStaff();
+		
+		initializeSystemCodes();
 		
 		if(colorService.findAll().size() == 0) {
 			Color blue = new Color();
@@ -165,6 +172,108 @@ public class ApplicationListener {
 			LOG.info("Default employees are inserted");
 		} else {
 			LOG.info("employee table initialization skipped");
+		}
+	}
+
+	private void initializeSystemCodes() {
+
+		if(systemCodesService.findAll().size() == 0) {
+			//Sizes
+			final String DRESS_SIZE = "DRESS_SIZE";
+			SystemCodes small = new SystemCodes();
+			small.setCategory(DRESS_SIZE);
+			small.setKey("SMALL");
+			small.setValue("Small");
+			small.setOrdinal(1);
+			systemCodesService.save(small);
+			
+			SystemCodes medium = new SystemCodes();
+			medium.setCategory(DRESS_SIZE);
+			medium.setKey("MEDIUM");
+			medium.setValue("Medium");
+			medium.setOrdinal(2);
+			systemCodesService.save(medium);
+			
+			SystemCodes large = new SystemCodes();
+			large.setCategory(DRESS_SIZE);
+			large.setKey("LARGE");
+			large.setValue("Large");
+			large.setOrdinal(3);
+			systemCodesService.save(large);
+			
+			SystemCodes large1 = new SystemCodes();
+			large1.setCategory(DRESS_SIZE);
+			large1.setKey("LARGE1");
+			large1.setValue("Large 1");
+			large1.setOrdinal(4);
+			systemCodesService.save(large1);
+			
+			SystemCodes large2 = new SystemCodes();
+			large2.setCategory(DRESS_SIZE);
+			large2.setKey("LARGE2");
+			large2.setValue("Large 2");
+			large2.setOrdinal(5);
+			systemCodesService.save(large2);
+			
+			//Status
+			final String INVENTORY_STATUS = "INVENTORY_STATUS";
+			SystemCodes inStock = new SystemCodes();
+			inStock.setCategory(INVENTORY_STATUS);
+			inStock.setKey("IN_STOCK");
+			inStock.setValue("In Stock");
+			inStock.setOrdinal(1);
+			systemCodesService.save(inStock);
+	
+			SystemCodes delivered = new SystemCodes();
+			delivered.setCategory(INVENTORY_STATUS);
+			delivered.setKey("DELIVERED");
+			delivered.setValue("Delivered");
+			delivered.setOrdinal(2);
+			systemCodesService.save(delivered);
+			
+			SystemCodes change = new SystemCodes();
+			change.setCategory(INVENTORY_STATUS);
+			change.setKey("CHANGE_ITEM");
+			change.setValue("Change item");
+			change.setOrdinal(3);
+			systemCodesService.save(change);
+			
+			SystemCodes returnItem = new SystemCodes();
+			returnItem.setCategory(INVENTORY_STATUS);
+			returnItem.setKey("RETURN_ITEM");
+			returnItem.setValue("Return item");
+			returnItem.setOrdinal(4);
+			systemCodesService.save(returnItem);
+			
+			SystemCodes sold = new SystemCodes();
+			sold.setCategory(INVENTORY_STATUS);
+			sold.setKey("SOLD");
+			sold.setValue("Sold");
+			sold.setOrdinal(5);
+			systemCodesService.save(sold);
+			
+			//Stores
+			final String STORE_BRANCHES = "STORE_BRANCHES";
+			SystemCodes glorietta = new SystemCodes();
+			glorietta.setCategory(STORE_BRANCHES);
+			glorietta.setKey("GLORIETTA");
+			glorietta.setValue("Glorietta");
+			glorietta.setOrdinal(1);
+			systemCodesService.save(glorietta);
+			
+			SystemCodes atc = new SystemCodes();
+			atc.setCategory(STORE_BRANCHES);
+			atc.setKey("ATC");
+			atc.setValue("Alabang Town Center");
+			atc.setOrdinal(2);
+			systemCodesService.save(atc);
+			
+			SystemCodes ermita = new SystemCodes();
+			ermita.setCategory(STORE_BRANCHES);
+			ermita.setKey("ERMITA");
+			ermita.setValue("Ermita");
+			ermita.setOrdinal(3);
+			systemCodesService.save(ermita);
 		}
 	}
 }

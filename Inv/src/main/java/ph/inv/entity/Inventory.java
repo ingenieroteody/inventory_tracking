@@ -1,5 +1,8 @@
 package ph.inv.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -45,25 +49,24 @@ public class Inventory extends BaseEntity{
 	//@Searchable
 	private Employee employee;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name="size", length=25, nullable=false)
-	private SizeEnum size;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="size_id", nullable=false)
+	private SystemCodes size;
 	
-	@Column(name="quantity", nullable=false)
-	private Integer quantity;
-
-	@Enumerated(EnumType.STRING)
-	@Column(name="status", length=25, nullable=false)
-	private RtwStatusEnum status;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="status_id", nullable=false)
+	private SystemCodes status;
 	
 	@Column(name="price", nullable=false)
 	private Double price;
+	
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="inventory")
+	private List<ItemMovement> itemMovements;
 	
 	@Transient
 	private String productName;
 	
 	public Inventory() {
-		this.status = RtwStatusEnum.IN_STOCK;
 	}
 	
 	public String getDate() {
@@ -82,14 +85,6 @@ public class Inventory extends BaseEntity{
 		this.product = product;
 	}
 
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
 	public String getNumberCode() {
 		return numberCode;
 	}
@@ -106,11 +101,11 @@ public class Inventory extends BaseEntity{
 		this.employee = employee;
 	}
 
-	public SizeEnum getSize() {
+	public SystemCodes getSize() {
 		return size;
 	}
 
-	public void setSize(SizeEnum size) {
+	public void setSize(SystemCodes size) {
 		this.size = size;
 	}
 
@@ -122,11 +117,11 @@ public class Inventory extends BaseEntity{
 		this.color = color;
 	}
 
-	public RtwStatusEnum getStatus() {
+	public SystemCodes getStatus() {
 		return status;
 	}
 
-	public void setStatus(RtwStatusEnum status) {
+	public void setStatus(SystemCodes status) {
 		this.status = status;
 	}
 
@@ -145,6 +140,14 @@ public class Inventory extends BaseEntity{
 
 	public void setPrice(Double price) {
 		this.price = price;
+	}
+
+	public List<ItemMovement> getItemMovements() {
+		return itemMovements;
+	}
+
+	public void setItemMovements(List<ItemMovement> itemMovements) {
+		this.itemMovements = itemMovements;
 	}
 	
 }

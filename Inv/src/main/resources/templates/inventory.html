@@ -51,12 +51,6 @@
 					</div>
 				</div>
 				<div class="form-group row">
-					<label class="col-sm-2 col-form-label">Quantity</label>
-					<div class="col-sm-3">
-						<input class="form-control" type="text" name="quantity" value="1" readonly />
-					</div>
-				</div>
-				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">Color</label>
 					<div class="col-sm-3">
 						<select class="form-control" th:field="${inventory.color.id}">
@@ -67,8 +61,8 @@
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label">Size</label>
 					<div class="col-sm-3">
-						<select class="form-control" th:field="${inventory.size}">
-							<option th:each="size : ${T(ph.inv.enums.SizeEnum).values()}" th:value="${size}" th:text="${size.value}"></option>
+						<select class="form-control" th:field="${inventory.size.id}">
+							<option th:each="size : ${sizes}" th:value="${size.id}" th:text="${size.value}"></option>
 						</select>
 					</div>
 				</div>				
@@ -83,8 +77,8 @@
 				<div class="form-group row" th:if="${inventory.id} != 0">
 					<label class="col-sm-2 col-form-label">Status</label>
 						<div class="col-sm-3">
-						<select class="form-control" th:field="${inventory.status}">
-							<option th:each="stat : ${T(ph.inv.enums.RtwStatusEnum).values()}" th:value="${stat}" th:text="${stat.value}"></option>
+						<select class="form-control" th:field="${inventory.status.id}">
+							<option th:each="status : ${statuses}" th:value="${status.id}" th:text="${status.value}"></option>
 						</select>
 					</div>
 				</div>		
