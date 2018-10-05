@@ -15,12 +15,10 @@ public class SystemCodesServiceImpl extends AbstractServiceImpl<SystemCodes, Lon
 	@Autowired
 	private SystemCodesDao dao;
 	
-	@Override
 	public List<SystemCodes> loadByCategory(String category) {
 		return dao.loadByCategory(category);
 	}
 
-	@Override
 	public SystemCodes loadByCategoryAndKey(String category, String key) {
 		return dao.loadByCategoryAndKey(category, key);
 	}

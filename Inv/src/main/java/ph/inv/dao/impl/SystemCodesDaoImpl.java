@@ -16,7 +16,6 @@ public class SystemCodesDaoImpl extends AbstractDaoImpl<SystemCodes,Long> implem
 		super(SystemCodes.class);
 	}
 
-	@Override
 	public List<SystemCodes> loadByCategory(String category) {
 		StringBuilder queryBuilder = new StringBuilder("SELECT s FROM SystemCodes s ");
 		queryBuilder.append("WHERE s.category= :category");

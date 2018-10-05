@@ -12,6 +12,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.WebDataBinder;
@@ -78,7 +79,7 @@ public abstract class AbstractController<T extends BaseEntity> {
 	}
 	
 	@GetMapping("/edit/{id}")
-	protected String edit(Model model, @PathVariable long id) {
+	protected String edit(Model model, @PathVariable long id) {		
 		model.addAttribute(entityName,service.find(id));
 		return entityName;
 	}

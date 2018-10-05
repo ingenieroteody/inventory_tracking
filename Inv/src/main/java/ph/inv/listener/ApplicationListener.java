@@ -84,16 +84,19 @@ public class ApplicationListener {
 			Product ivy = new Product();
 			ivy.setCode("IVY001");
 			ivy.setName("Ivy");
+			ivy.setPrice(4500d);
 			productService.save(ivy);
 			
 			Product ysa = new Product();
 			ysa.setCode("YSA001");
 			ysa.setName("Ysa");
+			ysa.setPrice(5500d);
 			productService.save(ysa);
 			
 			Product pat = new Product();
 			pat.setCode("PAT001");
 			pat.setName("Pat");
+			pat.setPrice(5000d);
 			productService.save(pat);
 			
 			LOG.info("Default products are inserted");
@@ -116,7 +119,7 @@ public class ApplicationListener {
 			
 			RoleAuthority roleAuthority = new RoleAuthority();
 			roleAuthority.setDescription("Can do anything");
-			roleAuthority.setAuthority("ADMIN");
+			roleAuthority.setAuthority("ROLE_ADMIN");
 			roleAuthority.setUserRole(userRole);
 			roleAuthorityService.save(roleAuthority);
 			
@@ -131,7 +134,7 @@ public class ApplicationListener {
 			
 			RoleAuthority roleAuthorityStaff = new RoleAuthority();
 			roleAuthorityStaff.setDescription("Post MTO");
-			roleAuthorityStaff.setAuthority("STAFF");
+			roleAuthorityStaff.setAuthority("ROLE_STAFF");
 			roleAuthorityStaff.setUserRole(userRoleStaff);
 			roleAuthorityService.save(roleAuthorityStaff);
 		}		
@@ -161,7 +164,7 @@ public class ApplicationListener {
 			helen.setFirstname("Helen");
 			helen.setLastname("");
 			helen.setPosition(PositionEnum.SEWER);
-			employeeService.save(riza);
+			employeeService.save(helen);
 			
 			Employee michael = new Employee();
 			michael.setFirstname("Michael");
