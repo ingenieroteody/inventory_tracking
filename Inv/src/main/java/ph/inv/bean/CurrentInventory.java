@@ -17,14 +17,6 @@ public class CurrentInventory {
 	
 	private String colorName;
 
-	public Long getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Long quantity) {
-		this.quantity = quantity;
-	}
-
 	public String getItemCode() {
 		return itemCode;
 	}
@@ -63,6 +55,14 @@ public class CurrentInventory {
 
 	public void setColorName(String colorName) {
 		this.colorName = colorName;
+	}
+
+	public Long getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Long quantity) {
+		this.quantity = quantity;
 	}
 	
 }

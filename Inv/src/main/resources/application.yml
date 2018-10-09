@@ -20,7 +20,7 @@ spring:
     initialization-mode: always
   jpa:
     #databasePlatform: org.hibernate.dialect.MySQL5Dialect 
-    show-sql: false
+    show-sql: true
     hibernate:
         ddl-auto: update
         dialect: org.hibernate.dialect.MySQL5Dialect

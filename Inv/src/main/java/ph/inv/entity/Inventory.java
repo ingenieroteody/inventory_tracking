@@ -66,6 +66,9 @@ public class Inventory extends BaseEntity{
 	@Transient
 	private String productName;
 	
+	@Transient
+	private String changeItemName;
+	
 	public Inventory() {
 	}
 	
@@ -148,6 +151,14 @@ public class Inventory extends BaseEntity{
 
 	public void setItemMovements(List<ItemMovement> itemMovements) {
 		this.itemMovements = itemMovements;
+	}
+
+	public String getChangeItemName() {
+		return changeItemName;
+	}
+
+	public void setChangeItemName(String changeItemName) {
+		this.changeItemName = changeItemName;
 	}
 	
 }

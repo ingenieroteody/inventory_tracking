@@ -50,13 +50,15 @@ public class InventoryDaoImpl extends AbstractDaoImpl<Inventory, Long> implement
 
 	public List<CurrentInventory> getCurrentStock() {
 		List<CurrentInventory> currentInventory = new LinkedList<CurrentInventory>();
-		StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(i.quantity), i.numberCode, p.code, p.name, i.status, c.name, i.size FROM Inventory i ");
+		StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(i.numberCode), p.code, p.name, s.value, c.name, ss.value FROM Inventory i ");
 		queryBuilder.append("INNER JOIN i.product p ");
 		queryBuilder.append("INNER JOIN i.color c ");
-		queryBuilder.append("GROUP BY i.numberCode, p.code, p.name, i.status, c.name, i.size HAVING i.status = :status");
+		queryBuilder.append("INNER JOIN i.status s ");
+		queryBuilder.append("INNER JOIN i.size ss ");
+		queryBuilder.append("GROUP BY i.numberCode, p.code, p.name, s.value, c.name, ss.value HAVING s.value = :status");
 	
 		Query query = entityManager.createQuery(queryBuilder.toString());
-		query.setParameter("status", RtwStatusEnum.IN_STOCK);
+		query.setParameter("status", "In Stock");
 		
 		@SuppressWarnings("unchecked")
 		List<Object []> queries = query.getResultList();
