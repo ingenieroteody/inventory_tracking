@@ -2,6 +2,7 @@ package ph.inv.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -55,6 +56,9 @@ public class InventoryController extends AbstractController<Inventory> {
 	
 	@Override
 	protected String save(@Valid Inventory entity, BindingResult bindingResult) {
+		System.out.println("Status: " + entity.getStatus());
+		System.out.println("StatusId: " + entity.getStatus().getId());
+		System.out.println("StatusKey: " + entity.getStatus().getKey());
 		if(entity.getStatus() == null) {
 			SystemCodes inStock = systemCodesService.loadByCategoryAndKey("INVENTORY_STATUS", "IN_STOCK");
 			ItemMovement itemMovement = new ItemMovement();
@@ -63,6 +67,13 @@ public class InventoryController extends AbstractController<Inventory> {
 			itemMovement.setStatus(inStock);
 			entity.setItemMovements(new ArrayList<ItemMovement>(Arrays.asList(itemMovement)));
 			entity.setStatus(inStock);
+		} else if (entity.getStatus().getKey().equals("DELIVERED")) {
+			ItemMovement itemMovement = new ItemMovement();
+			itemMovement.setInventory(entity);
+			itemMovement.setDate(new Date());
+			itemMovement.setStatus(entity.getStatus());
+			itemMovement.setStoreBranch(entity.getStoreBranch());
+			entity.setItemMovements(new ArrayList<ItemMovement>(Arrays.asList(itemMovement)));
 		}
 		return super.save(entity, bindingResult);
 	}
@@ -77,6 +88,9 @@ public class InventoryController extends AbstractController<Inventory> {
 		} else if (inventory.getStatus().getKey().equals("DELIVERED")) {
 			removeStatus(statuses, "IN_STOCK");
 		}
+		
+
+		
 		
 		model.addAttribute("statuses", statuses);
 		model.addAttribute(entityName,inventory);
@@ -101,6 +115,11 @@ public class InventoryController extends AbstractController<Inventory> {
 	@ModelAttribute("statuses")
 	public List<SystemCodes> getStatuses() {
 		return systemCodesService.loadByCategory("INVENTORY_STATUS");
+	}
+
+	@ModelAttribute("storeBranches")
+	public List<SystemCodes> getStoreBranches() {
+		return systemCodesService.loadByCategory("STORE_BRANCHES");
 	}
 	
 	@Override

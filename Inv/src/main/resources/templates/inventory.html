@@ -82,11 +82,20 @@
 						</select>
 					</div>
 				</div>
-				<div class="form-group row">
+				
+				<div class="form-group row" th:classappend="${inventory.id} != 0 and ${inventory.status.key} != 'IN_STOCK' ? '' : 'd-none'">
+					<label class="col-sm-2 col-form-label">Store Branches</label>
+						<div class="col-sm-3">
+						<select class="form-control" th:field="${inventory.storeBranch.id}">
+							<option th:each="store : ${storeBranches}" th:value="${store.id}" th:text="${store.value}"></option>
+						</select>
+					</div>
+				</div>				
+				<div class="form-group row" th:if="${inventory.status} != null and ${inventory.status.key} == 'CHANGE_ITEM'">
 					<label class="col-sm-2 col-form-label">Change item to</label>
 					<div class="col-sm-3">
-						<input id="changeItemName" class="form-control" th:classappend="${#fields.hasErrors('product')} ? is-invalid : ''" th:field="*{changeItemName}" />
-						<input id="changeItemValue" type="hidden" th:field="*{product}" />
+						<input id="changeItemName" class="form-control" th:classappend="${#fields.hasErrors('product')} ? is-invalid : ''" th:field="*{product}" />
+						<input id="changeItemValue" type="hidden"/>
 						<div class="invalid-feedback" th:if="${#fields.hasErrors('product')}">
 							<p th:each="err : ${#fields.errors('product')}" th:text="${err}"></p>
 						</div>						
@@ -285,6 +294,10 @@
 			//If change item, show textbox with number code of item to be replaced
 			if(this.value==8) {
 				
+			} else if (this.value==7) { //If delivered item, show select box for branches 
+				$("#storeBranch").parent().parent().removeClass('d-none');
+			} else if (this.value==6) {
+				$("#storeBranch").parent().parent().addClass('d-none');
 			}
 		})
 	})

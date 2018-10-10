@@ -57,6 +57,10 @@ public class Inventory extends BaseEntity{
 	@JoinColumn(name="status_id", nullable=false)
 	private SystemCodes status;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="store_branch_id", nullable=true)
+	private SystemCodes storeBranch;
+	
 	@Column(name="price", nullable=false)
 	private Double price;
 	
@@ -65,6 +69,9 @@ public class Inventory extends BaseEntity{
 	
 	@Transient
 	private String productName;
+	
+	@Transient
+	private String storeBranchName;
 	
 	@Transient
 	private String changeItemName;
@@ -159,6 +166,22 @@ public class Inventory extends BaseEntity{
 
 	public void setChangeItemName(String changeItemName) {
 		this.changeItemName = changeItemName;
+	}
+
+	public SystemCodes getStoreBranch() {
+		return storeBranch;
+	}
+
+	public void setStoreBranch(SystemCodes storeBranch) {
+		this.storeBranch = storeBranch;
+	}
+
+	public String getStoreBranchName() {
+		return storeBranchName;
+	}
+
+	public void setStoreBranchName(String storeBranchName) {
+		this.storeBranchName = storeBranchName;
 	}
 	
 }

@@ -41,6 +41,10 @@ public class ItemMovement extends BaseEntity {
 	@JoinColumn(name="status_id", nullable=false)
 	private SystemCodes status;
 	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="store_branch_id", nullable=true)
+	private SystemCodes storeBranch;
+	
 	public ItemMovement() {
 		// TODO Auto-generated constructor stub
 	}
@@ -83,5 +87,13 @@ public class ItemMovement extends BaseEntity {
 
 	public void setStatus(SystemCodes status) {
 		this.status = status;
+	}
+
+	public SystemCodes getStoreBranch() {
+		return storeBranch;
+	}
+
+	public void setStoreBranch(SystemCodes storeBranch) {
+		this.storeBranch = storeBranch;
 	}
 }

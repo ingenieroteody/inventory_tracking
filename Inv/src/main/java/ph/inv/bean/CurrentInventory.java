@@ -11,9 +11,9 @@ public class CurrentInventory {
 	
 	private String itemName;
 	
-	private SizeEnum itemSize;
+	private String itemSize;
 
-	private RtwStatusEnum itemStatus;
+	private String itemStatus;
 	
 	private String colorName;
 
@@ -33,19 +33,19 @@ public class CurrentInventory {
 		this.itemName = itemName;
 	}
 
-	public SizeEnum getItemSize() {
+	public String getItemSize() {
 		return itemSize;
 	}
 
-	public void setItemSize(SizeEnum itemSize) {
+	public void setItemSize(String itemSize) {
 		this.itemSize = itemSize;
 	}
 
-	public RtwStatusEnum getItemStatus() {
+	public String getItemStatus() {
 		return itemStatus;
 	}
 
-	public void setItemStatus(RtwStatusEnum itemStatus) {
+	public void setItemStatus(String itemStatus) {
 		this.itemStatus = itemStatus;
 	}
 

@@ -50,7 +50,7 @@ public class InventoryDaoImpl extends AbstractDaoImpl<Inventory, Long> implement
 
 	public List<CurrentInventory> getCurrentStock() {
 		List<CurrentInventory> currentInventory = new LinkedList<CurrentInventory>();
-		StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(i.numberCode), p.code, p.name, s.value, c.name, ss.value FROM Inventory i ");
+		StringBuilder queryBuilder = new StringBuilder("SELECT COUNT(i.numberCode), p.code, p.name, s.value, c.name, ss.value, ss.value FROM Inventory i ");
 		queryBuilder.append("INNER JOIN i.product p ");
 		queryBuilder.append("INNER JOIN i.color c ");
 		queryBuilder.append("INNER JOIN i.status s ");
@@ -67,10 +67,10 @@ public class InventoryDaoImpl extends AbstractDaoImpl<Inventory, Long> implement
 			CurrentInventory i = new CurrentInventory();
 			i.setQuantity((Long) q[0]);
 			i.setItemCode((String) q[1]);
-			i.setItemName((String) q[2] + " - " + (String) q[3]);
-			i.setItemStatus((RtwStatusEnum) q[4]);
-			i.setColorName((String) q[5]);
-			i.setItemSize((SizeEnum) q[6]);
+			i.setItemName((String) q[2]);
+			i.setItemStatus((String) q[3]);
+			i.setColorName((String) q[4]);
+			i.setItemSize((String) q[5]);
 			currentInventory.add(i);
 		}
 		

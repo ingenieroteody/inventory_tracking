@@ -143,8 +143,8 @@ public class RestController {
 			jsonData.add(ci.getQuantity()+"");
 			jsonData.add(ci.getItemCode());
 			jsonData.add(ci.getItemName());
-			jsonData.add(ci.getItemSize().getValue());
-			jsonData.add(ci.getItemStatus().getValue());
+			jsonData.add(ci.getItemSize());
+			jsonData.add(ci.getItemStatus());
 			jsonData.add(ci.getColorName());
 			jsonInventories.add(jsonData);
 		}
