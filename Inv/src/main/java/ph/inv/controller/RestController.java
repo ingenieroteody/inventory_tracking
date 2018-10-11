@@ -20,12 +20,14 @@ import ph.inv.entity.Color;
 import ph.inv.entity.Customer;
 import ph.inv.entity.Employee;
 import ph.inv.entity.Inventory;
+import ph.inv.entity.ItemMovement;
 import ph.inv.entity.Mto;
 import ph.inv.entity.Product;
 import ph.inv.service.ColorService;
 import ph.inv.service.CustomerService;
 import ph.inv.service.EmployeeService;
 import ph.inv.service.InventoryService;
+import ph.inv.service.ItemMovementService;
 import ph.inv.service.MtoService;
 import ph.inv.service.ProductService;
 
@@ -50,6 +52,9 @@ public class RestController {
 	
 	@Autowired
 	private MtoService mtoService;
+	
+	@Autowired
+	private ItemMovementService itemMovementService;
 	
 	@RequestMapping(path="/getallproducts", method=RequestMethod.GET)
 	public DataTable<String> getAllProducts(@RequestParam MultiValueMap<String, String> params) {
@@ -154,7 +159,7 @@ public class RestController {
 		return dataTable;
 	}	
 	
-	
+	@Deprecated
 	@RequestMapping(path="/auditinventory", method=RequestMethod.GET, produces="application/json")
 	public List<AuditDisplay> auditInventory(@RequestParam MultiValueMap<String, String> params) {
 		List<Object []> inventory = inventoryService.getAuditTrail(Long.parseLong(params.getFirst("id")));
@@ -166,9 +171,6 @@ public class RestController {
 			List<String> jsonData = new LinkedList<String>();
 			final Inventory i = (Inventory) o[0];
 			final DefaultRevisionEntity revision = (DefaultRevisionEntity) o[1];
-			System.out.println(i);
-			System.out.println(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.S").format(revision.getRevisionDate()) + " : " + revision.getTimestamp());
-			System.out.println(o[2]+"");
 			
 			jsonData.add(i.getDate());
 			jsonData.add(i.getNumberCode());
@@ -189,6 +191,12 @@ public class RestController {
 		return auditDisplays;
 	}
 	
+	@RequestMapping(path="/itemmovement", method=RequestMethod.GET, produces="application/json")
+	public List<ItemMovement> itemMovement(@RequestParam Map<String, String> params) {
+		List<ItemMovement> itemMovements = itemMovementService.trackInventory(Long.parseLong(params.get("id")));
+		return itemMovements;
+		
+	}
 	@RequestMapping(path="/getallmtos", method=RequestMethod.GET) 
 	public DataTable<String> getAllMTOs(@RequestParam MultiValueMap<String, String> params) { 
 		DataTable<String> dataTable = new DataTable<String>();
@@ -243,7 +251,6 @@ public class RestController {
 	
 	@RequestMapping(path="/findinventoryitem", method=RequestMethod.GET, produces="application/json")
 	public List<Inventory> findInventoryItem(@RequestParam Map<String, String> params) {
-		System.out.println((String) params.get("keyword") +" : " + (String) params.get("id"));
 		List<Inventory> inventories = inventoryService.findLikeNumberCode((String) params.get("keyword"), (String) params.get("id"));
 		return inventories;
 	}

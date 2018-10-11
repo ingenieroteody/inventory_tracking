@@ -152,15 +152,10 @@
 	        <table id="audit-table" class="table table-hover">
 	        	<thead>
 	        		<tr>
-	        			<th scope="col">Event</th>
-	        			<th scope="col">Revision Date</th>
-	        			<th scope="col">Date</th>
-	        			<th scope="col">Code</th>
-	        			<th scope="col">Product</th>
-	        			<th scope="col">Color</th>
-	        			<th scope="col">Size</th>
+	        			<th scope="col">Action Date</th>
 	        			<th scope="col">Status</th>
-	        			<th scope="col">Employee</th>
+	        			<th scope="col">Branch</th>
+	        			<th scope="col">Item Replaced</th>
 	        		</tr>
 	        	</thead>
 	        	<tbody>
@@ -200,7 +195,7 @@
 			$("a[id^=inventory-]").click(function() {
 				var id = this.id.split("-")[1];
 				$.ajax({
-					url: "http://localhost:8888/inv/api/auditinventory",
+					url: "http://localhost:8888/inv/api/itemmovement",
 					type: "GET",
 					dataType: "json",
 					data: "id=" + id,
@@ -209,16 +204,12 @@
 						var auditData = "";
 						for(var i = 0; i < data.length; i++) {
 							auditData += "<tr>";
-							auditData += "<td>" + data[i].eventType + "</td>";
-							auditData += "<td>" + data[i].revisionDate + "</td>";
-							auditData += "<td>" + data[i].fields[0] + "</td>";
-							auditData += "<td>" + data[i].fields[1] + "</td>";
-							auditData += "<td>" + data[i].fields[2] + "</td>";
-							auditData += "<td>" + data[i].fields[3] + "</td>";
-							auditData += "<td>" + data[i].fields[4] + "</td>";
-							auditData += "<td>" + data[i].fields[5] + "</td>";
-							auditData += "<td>" + data[i].fields[6] + "</td>";
+							auditData += "<td>" + data[i].date + "</td>";
+							auditData += "<td>" + (!data[i].status ? '' : data[i].status.value) + "</td>";
+							auditData += "<td>" + (!data[i].storeBranch ? '' : data[i].storeBranch.value) + "</td>";
+							auditData += "<td>" + (!data[i].itemReplaced ? '' : data[i].itemReplaced.numberCode) + " - "+ (!data[i].itemReplaced ? '' : data[i].itemReplaced.productName) + "</td>";
 							auditData += "</tr>";
+							console.log(data[i]);
 						}
 						$("#audit-table > tbody").append(auditData);
 						$("#modalAudit").modal("toggle").css("font-size","10px");

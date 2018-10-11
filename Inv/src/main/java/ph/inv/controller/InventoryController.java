@@ -101,7 +101,7 @@ public class InventoryController extends AbstractController<Inventory> {
 			for(int x=movements.size()-1; x >= 0; x--) {
 				ItemMovement m = movements.get(x);
 				if(m.getStatus().getKey().equals("CHANGE_ITEM")) {
-					inventory.setChangeItemName(m.getItemReplaced().getProductName());
+					inventory.setChangeItemName("["+m.getItemReplaced().getNumberCode() +"] "+ m.getItemReplaced().getProductName());
 					inventory.setChangeItemValue(m.getItemReplaced().getId());
 				}
 			}
