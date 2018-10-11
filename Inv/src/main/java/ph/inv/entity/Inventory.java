@@ -16,6 +16,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.envers.Audited;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ph.inv.annotation.Searchable;
 import ph.inv.enums.RtwStatusEnum;
 import ph.inv.enums.SizeEnum;
@@ -57,7 +59,7 @@ public class Inventory extends BaseEntity{
 	@JoinColumn(name="status_id", nullable=false)
 	private SystemCodes status;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="store_branch_id", nullable=true)
 	private SystemCodes storeBranch;
 	
@@ -65,6 +67,7 @@ public class Inventory extends BaseEntity{
 	private Double price;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="inventory")
+	@JsonIgnore
 	private List<ItemMovement> itemMovements;
 	
 	@Transient
@@ -74,7 +77,11 @@ public class Inventory extends BaseEntity{
 	private String storeBranchName;
 	
 	@Transient
+	@JsonIgnore
 	private String changeItemName;
+	
+	@Transient
+	private Long changeItemValue;
 	
 	public Inventory() {
 	}
@@ -182,6 +189,14 @@ public class Inventory extends BaseEntity{
 
 	public void setStoreBranchName(String storeBranchName) {
 		this.storeBranchName = storeBranchName;
+	}
+
+	public Long getChangeItemValue() {
+		return changeItemValue;
+	}
+
+	public void setChangeItemValue(Long changeItemValue) {
+		this.changeItemValue = changeItemValue;
 	}
 	
 }

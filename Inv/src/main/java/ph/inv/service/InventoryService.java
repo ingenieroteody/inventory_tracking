@@ -11,6 +11,8 @@ public interface InventoryService extends AbstractService<Inventory, Long>{
 	
 	public List<Inventory> findByNumberCode(String numberCode);
 	
+	public List<Inventory> findLikeNumberCode(String numberCode, String currentNumberCode);
+	
 	public List<CurrentInventory> getCurrentStock();
 	
 	public List<Object []> getAuditTrail(Long id);

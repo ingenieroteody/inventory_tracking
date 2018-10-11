@@ -56,10 +56,30 @@ public class InventoryController extends AbstractController<Inventory> {
 	
 	@Override
 	protected String save(@Valid Inventory entity, BindingResult bindingResult) {
-		System.out.println("Status: " + entity.getStatus());
-		System.out.println("StatusId: " + entity.getStatus().getId());
-		System.out.println("StatusKey: " + entity.getStatus().getKey());
-		if(entity.getStatus() == null) {
+		SystemCodes currentStatus = entity.getStatus();
+		
+		if(currentStatus != null) {
+			currentStatus = systemCodesService.find(entity.getStatus().getId());
+			if (currentStatus.getKey().equals("DELIVERED") || currentStatus.getKey().equals("SOLD")) {
+				ItemMovement itemMovement = new ItemMovement();
+				itemMovement.setInventory(entity);
+				itemMovement.setDate(new Date());
+				itemMovement.setStatus(entity.getStatus());
+				itemMovement.setStoreBranch(entity.getStoreBranch());
+				entity.setItemMovements(new ArrayList<ItemMovement>(Arrays.asList(itemMovement)));
+			} else if (currentStatus.getKey().equals("CHANGE_ITEM") ) {
+				System.out.println("ItemValue: " + entity.getChangeItemValue());
+				System.out.println("ItemName: " + entity.getChangeItemName());
+				Inventory itemReplaced = service.find(entity.getChangeItemValue());
+				ItemMovement itemMovement = new ItemMovement();
+				itemMovement.setInventory(entity);
+				itemMovement.setDate(new Date());
+				itemMovement.setStatus(entity.getStatus());
+				itemMovement.setStoreBranch(entity.getStoreBranch());
+				itemMovement.setItemReplaced(itemReplaced);
+				entity.setItemMovements(new ArrayList<ItemMovement>(Arrays.asList(itemMovement)));				
+			}
+		} else {
 			SystemCodes inStock = systemCodesService.loadByCategoryAndKey("INVENTORY_STATUS", "IN_STOCK");
 			ItemMovement itemMovement = new ItemMovement();
 			itemMovement.setInventory(entity);
@@ -67,14 +87,7 @@ public class InventoryController extends AbstractController<Inventory> {
 			itemMovement.setStatus(inStock);
 			entity.setItemMovements(new ArrayList<ItemMovement>(Arrays.asList(itemMovement)));
 			entity.setStatus(inStock);
-		} else if (entity.getStatus().getKey().equals("DELIVERED")) {
-			ItemMovement itemMovement = new ItemMovement();
-			itemMovement.setInventory(entity);
-			itemMovement.setDate(new Date());
-			itemMovement.setStatus(entity.getStatus());
-			itemMovement.setStoreBranch(entity.getStoreBranch());
-			entity.setItemMovements(new ArrayList<ItemMovement>(Arrays.asList(itemMovement)));
-		}
+		} 
 		return super.save(entity, bindingResult);
 	}
 	
@@ -82,6 +95,17 @@ public class InventoryController extends AbstractController<Inventory> {
 	protected String edit(Model model, @PathVariable long id) {
 		Inventory inventory = super.service.find(id);
 		List<SystemCodes> statuses = systemCodesService.loadByCategory("INVENTORY_STATUS");
+		
+		List<ItemMovement> movements = inventory.getItemMovements();
+		if(movements.size() > 0) {
+			for(int x=movements.size()-1; x >= 0; x--) {
+				ItemMovement m = movements.get(x);
+				if(m.getStatus().getKey().equals("CHANGE_ITEM")) {
+					inventory.setChangeItemName(m.getItemReplaced().getProductName());
+					inventory.setChangeItemValue(m.getItemReplaced().getId());
+				}
+			}
+		}
 		
 		if(inventory.getStatus().getKey().equals("IN_STOCK")) {
 			removeStatus(statuses, "CHANGE_ITEM","RETURN_ITEM","SOLD");

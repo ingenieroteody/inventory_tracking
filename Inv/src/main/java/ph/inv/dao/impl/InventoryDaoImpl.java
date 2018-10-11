@@ -85,4 +85,17 @@ public class InventoryDaoImpl extends AbstractDaoImpl<Inventory, Long> implement
 
 		return auditQuery.getResultList();
 	}
+
+	public List<Inventory> findLikeNumberCode(String numberCode, String currentNumberCode) {
+		StringBuilder queryBuilder = new StringBuilder("SELECT i FROM Inventory i ");
+		//queryBuilder.append("INNER JOIN i.product p ");
+		queryBuilder.append("WHERE i.numberCode LIKE :numberCode ");
+		queryBuilder.append("AND i.numberCode != :currentNumberCode ");
+		
+		TypedQuery<Inventory> query = entityManager.createQuery(queryBuilder.toString(), Inventory.class);
+		query.setParameter("numberCode", "%"+numberCode+"%");
+		query.setParameter("currentNumberCode", currentNumberCode);
+		
+		return query.getResultList();
+	}
 }

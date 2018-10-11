@@ -33,4 +33,8 @@ public class InventoryServiceImpl extends AbstractServiceImpl<Inventory, Long> i
 	public List<Object []> getAuditTrail(Long id) {
 		return inventoryDao.getAuditTrail(id);
 	}
+
+	public List<Inventory> findLikeNumberCode(String numberCode, String currentNumberCode) {
+		return inventoryDao.findLikeNumberCode(numberCode, currentNumberCode);
+	}
 }

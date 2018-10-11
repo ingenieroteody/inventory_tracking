@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -238,6 +239,13 @@ public class RestController {
 	public List<Product> findProduct(@RequestParam MultiValueMap<String, String> params) {
 		List<Product> products = productService.findBySearch((String) params.getFirst("keyword"), "id");
 		return products;
+	}
+	
+	@RequestMapping(path="/findinventoryitem", method=RequestMethod.GET, produces="application/json")
+	public List<Inventory> findInventoryItem(@RequestParam Map<String, String> params) {
+		System.out.println((String) params.get("keyword") +" : " + (String) params.get("id"));
+		List<Inventory> inventories = inventoryService.findLikeNumberCode((String) params.get("keyword"), (String) params.get("id"));
+		return inventories;
 	}
 	
 	public static void main(String [] args) {
